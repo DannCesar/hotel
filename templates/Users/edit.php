@@ -1,13 +1,26 @@
-<h1>Editar Usuário</h1>
+<!DOCTYPE html>
+<html lang="en">
 
-<div>
-    <span>Atualize os dados do usuário</span>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
 
-    <?= $this->Form->create($user) ?>
-    <?= $this->Form->control('name', ['label' => 'Nome', 'value' => $user->name ?? '']) ?>
-    <?= $this->Form->control('email', ['label' => 'E-mail', 'value' => $user->email ?? '']) ?>
-    <?= $this->Form->control('password', ['label' => 'Senha', 'type' => 'password']) ?>
-    <?= $this->Form->button('Salvar Alterações') ?>
-    <?= $this->Form->end() ?>
+<body>
+    <h1>Editar Usuário</h1>
 
-</div>
+    <div>
+        <span>Atualize os dados do usuário</span>
+
+        <?= $this->Form->create($user) ?>
+        <?= $this->Form->control('name', ['label' => 'Nome', 'value' => $user->name ?? '']) ?>
+        <?= $this->Form->control('email', ['label' => 'E-mail', 'value' => $user->email ?? '']) ?>
+        <?= $this->Form->control('password', ['label' => 'Senha', 'type' => 'password']) ?>
+        <?= $this->Form->button('Salvar Alterações') ?>
+        <?= $this->Form->end() ?>
+
+    </div>
+</body>
+
+</html>

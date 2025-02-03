@@ -1,7 +1,10 @@
 <?php
 declare(strict_types=1);
 
+
 namespace App\Controller;
+
+use Cake\I18n\FrozenTime;
 
 /**
  * Reservas Controller
@@ -65,7 +68,10 @@ class ReservasController extends AppController
             if (!empty($conflitosData)) {
                 $datasIndisponiveis = [];
                 foreach ($conflitosData as $conflito) {
-                    $datasIndisponiveis[] = "De {$conflito->datainicial} até {$conflito->datafinal}";
+                    $data_inicial = (new FrozenTime($conflito->datainicial))->i18nFormat('dd/MM/yyyy');
+                    $data_final = (new FrozenTime($conflito->datafinal))->i18nFormat('dd/MM/yyyy');
+
+                    $datasIndisponiveis[] = "De {$data_inicial} até {$data_final}";
                 }
 
                 $this->Flash->error(__('O quarto está indisponível nas seguintes datas: ' . implode(', ', $datasIndisponiveis)));

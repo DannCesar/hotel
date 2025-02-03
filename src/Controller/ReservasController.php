@@ -44,15 +44,42 @@ class ReservasController extends AppController
     public function add()
     {
         $reserva = $this->Reservas->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $reserva = $this->Reservas->patchEntity($reserva, $this->request->getData());
-            if ($this->Reservas->save($reserva)) {
-                $this->Flash->success(__('The reserva has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+
+            $datainicial = $data['datainicial'];
+            $datafinal = $data['datafinal'];
+
+            $conflitosData = $this->Reservas->find()
+                ->where([
+                    'OR' => [
+                        [
+                            'datainicial <' => $datafinal,
+                            'datafinal >' => $datainicial
+                        ]
+                    ]
+                ])
+                ->toArray();
+
+            if (!empty($conflitosData)) {
+                $datasIndisponiveis = [];
+                foreach ($conflitosData as $conflito) {
+                    $datasIndisponiveis[] = "De {$conflito->datainicial} até {$conflito->datafinal}";
+                }
+
+                $this->Flash->error(__('O quarto está indisponível nas seguintes datas: ' . implode(', ', $datasIndisponiveis)));
+            } else {
+                $reserva = $this->Reservas->patchEntity($reserva, $data);
+                if ($this->Reservas->save($reserva)) {
+                    $this->Flash->success(__('Reserva criada com sucesso.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('Não foi possível criar a reserva. Tente novamente.'));
+                }
             }
-            $this->Flash->error(__('The reserva could not be saved. Please, try again.'));
         }
+
         $this->set(compact('reserva'));
     }
 
